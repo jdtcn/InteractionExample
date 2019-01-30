@@ -1,0 +1,31 @@
+<p>Calc locally:</p>
+<ng-container *ngIf="(available$ | async); else unavailable">
+    <label for="number1"></label>
+    <input id="number1" type="text" [(ngModel)]="number1">
+
+    <p>+</p>
+
+    <label for="number2"></label>
+    <input id="number2" type="text" [(ngModel)]="number2">
+
+    <p>
+        <button (click)="calculate()" [disabled]="calculating$ | async">
+            {{ (calculating$ | async) ? 'Calculating...' : 'Calculate' }}
+        </button>
+    </p>
+
+    <p>Result:</p>
+    <pre>{{result$ | async}}</pre>
+
+</ng-container>
+<ng-template #unavailable>
+    <p>Service unavailable</p>
+    <ng-container *ngIf="(busy$ | async); else error">
+        <p>Wait...</p>
+    </ng-container>
+    <ng-template #error>
+        <button (click)="checkAvailability($event)">Check again</button>
+        <p>Error:</p>
+        <pre>{{error$ | async}}</pre>
+    </ng-template>
+</ng-template>
